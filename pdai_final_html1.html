@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Калькулятор PDAI (Pemphigus Disease Area Index) для оценки тяжести пузырчатки">
+    <title>Skin Lab Pro - Калькулятор PDAI</title>
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @media print {
+            body {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
+            @page {
+                margin: 1.5cm;
+                size: A4;
+            }
+            .print\:hidden {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // Lucide Icons
+        const Calculator = () => (
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect width="16" height="20" x="4" y="2" rx="2"/>
+                <line x1="8" x2="16" y1="6" y2="6"/>
+            </svg>
+        );
+
+        const RefreshCw = () => (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                <path d="M21 3v5h-5"/>
+                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                <path d="M8 16H3v5"/>
+            </svg>
+        );
+
+        const Printer = () => (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/>
+                <rect x="6" y="14" width="12" height="8" rx="1"/>
+            </svg>
+        );
+
+        const Download = () => (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" x2="12" y1="15" y2="3"/>
+            </svg>
+        );
+
+        const CheckCircle = () => (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <path d="m9 11 3 3L22 4"/>
+            </svg>
+        );
+
+        const AlertCircle = () => (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" x2="12" y1="8" y2="12"/>
+                <line x1="12" x2="12.01" y1="16" y2="16"/>
+            </svg>
+        );
+
+        const XCircle = () => (
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="m15 9-6 6"/>
+                <path d="m9 9 6 6"/>
+            </svg>
+        );
+
+        const Info = () => (
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 16v-4"/>
+                <path d="M12 8h.01"/>
+            </svg>
+        );
+
+        const PDAICalculator = () => {
+          const [patientData, setPatientData] = useState({
+            fullName: '', birthYear: '', diagnosis: '', immunofluorescence: ''
+          });
+          const [recommendations, setRecommendations] = useState('');
+          const [skinAreas, setSkinAreas] = useState({
+            ears: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+            nose: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+            face: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+            neck: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+            chest: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+            abdomen: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+            back: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+            arms: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+            hands: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+            legs: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+            feet: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+            genitals: { erosions: 0, pigmentation: 0, lesionCount: 0 }
+          });
+          const [scalp, setScalp] = useState({ erosions: 0, pigmentation: 0, lesionCount: 0 });
+          const [mucosa, setMucosa] = useState({
+            eyes: 0, nose: 0, buccal: 0, hardPalate: 0, softPalate: 0,
+            upperGingiva: 0, lowerGingiva: 0, tongue: 0, floorOfMouth: 0,
+            lips: 0, pharynx: 0, anogenital: 0
+          });
+          const [totals, setTotals] = useState({
+            skinErosions: 0, skinPigmentation: 0, skinLesionCount: 0,
+            scalpErosions: 0, scalpPigmentation: 0, scalpLesionCount: 0,
+            mucosaTotal: 0, overallSeverity: 0, overallDamage: 0, totalScore: 0
+          });
+
+          const calculateLesionScore = (count) => {
+            if (count === 1) return 1;
+            if (count === 2) return 1.3;
+            if (count === 3) return 1.6;
+            return 0;
+          };
+
+          useEffect(() => {
+            const se = Object.values(skinAreas).reduce((s, a) => s + a.erosions, 0);
+            const sp = Object.values(skinAreas).reduce((s, a) => s + a.pigmentation, 0);
+            const sl = Object.values(skinAreas).reduce((s, a) => s + calculateLesionScore(a.lesionCount), 0);
+            const mt = Object.values(mucosa).reduce((s, v) => s + v, 0);
+            const scl = calculateLesionScore(scalp.lesionCount);
+            const os = se + sl + scalp.erosions + scl + mt;
+            const od = sp + scalp.pigmentation;
+            setTotals({
+              skinErosions: se, skinPigmentation: sp, skinLesionCount: sl,
+              scalpErosions: scalp.erosions, scalpPigmentation: scalp.pigmentation,
+              scalpLesionCount: scl, mucosaTotal: mt, overallSeverity: os,
+              overallDamage: od, totalScore: os + od
+            });
+          }, [skinAreas, scalp, mucosa]);
+
+          const getSeverity = (score) => {
+            if (score < 15) return { level: 'Легкая степень тяжести', color: 'text-green-700 bg-green-50 border-green-300', icon: CheckCircle, iconColor: 'text-green-600' };
+            if (score <= 45) return { level: 'Средняя степень тяжести', color: 'text-yellow-700 bg-yellow-50 border-yellow-300', icon: AlertCircle, iconColor: 'text-yellow-600' };
+            return { level: 'Тяжелая степень тяжести', color: 'text-red-700 bg-red-50 border-red-300', icon: XCircle, iconColor: 'text-red-600' };
+          };
+
+          const updatePatient = (f, v) => setPatientData(p => ({ ...p, [f]: v }));
+          const updateSkin = (a, f, v) => {
+            const n = v === '' ? 0 : parseInt(v);
+            setSkinAreas(p => ({ ...p, [a]: { ...p[a], [f]: isNaN(n) ? 0 : n } }));
+          };
+          const updateScalp = (f, v) => {
+            const n = v === '' ? 0 : parseInt(v);
+            setScalp(p => ({ ...p, [f]: isNaN(n) ? 0 : n }));
+          };
+          const updateMucosa = (a, v) => {
+            const n = v === '' ? 0 : parseInt(v);
+            setMucosa(p => ({ ...p, [a]: isNaN(n) ? 0 : n }));
+          };
+
+          const reset = () => {
+            setPatientData({ fullName: '', birthYear: '', diagnosis: '', immunofluorescence: '' });
+            setRecommendations('');
+            setSkinAreas({
+              ears: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+              nose: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+              face: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+              neck: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+              chest: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+              abdomen: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+              back: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+              arms: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+              hands: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+              legs: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+              feet: { erosions: 0, pigmentation: 0, lesionCount: 0 },
+              genitals: { erosions: 0, pigmentation: 0, lesionCount: 0 }
+            });
+            setScalp({ erosions: 0, pigmentation: 0, lesionCount: 0 });
+            setMucosa({ eyes: 0, nose: 0, buccal: 0, hardPalate: 0, softPalate: 0, upperGingiva: 0, lowerGingiva: 0, tongue: 0, floorOfMouth: 0, lips: 0, pharynx: 0, anogenital: 0 });
+          };
+
+          const skinLabels = {
+            ears: 'Уши', nose: 'Нос', face: 'Остальная часть лица', neck: 'Шея', 
+            chest: 'Грудь', abdomen: 'Живот', back: 'Спина, ягодицы', arms: 'Руки',
+            hands: 'Кисти рук', legs: 'Ноги', feet: 'Стопа', genitals: 'Гениталий'
+          };
+
+          const mucosaLabels = {
+            eyes: 'Глаза', nose: 'Нос', buccal: 'Слизистая оболочка щеки',
+            hardPalate: 'Твёрдое нёбо', softPalate: 'Мягкое нёбо',
+            upperGingiva: 'Верхняя десна', lowerGingiva: 'Нижняя десна',
+            tongue: 'Язык', floorOfMouth: 'Дно полости рта',
+            lips: 'Слизистая оболочка губ', pharynx: 'Задняя стенка глотки',
+            anogenital: 'Аногенитальная область'
+          };
+
+          const scores = [0, 1, 2, 3, 5, 10];
+          const sev = getSeverity(totals.overallSeverity);
+          const SevIcon = sev.icon;
+
+          return (
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4 md:p-8">
+              <div className="max-w-7xl mx-auto">
+                <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+                  <div className="flex items-center justify-between flex-wrap gap-4">
+                    <div className="flex items-center gap-3">
+                      <div className="bg-indigo-600 p-3 rounded-lg">
+                        <Calculator />
+                      </div>
+                      <div>
+                        <h1 className="text-3xl font-bold text-gray-800">Skin Lab Pro</h1>
+                        <p className="text-gray-500 text-sm">by itsmegauka</p>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 print:hidden">
+                      <button onClick={() => window.print()} className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors">
+                        <Printer />Печать
+                      </button>
+                      <button onClick={() => window.print()} className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                        <Download />PDF
+                      </button>
+                      <button onClick={reset} className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors">
+                        <RefreshCw />Сбросить
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+                  <h2 className="text-2xl font-bold mb-4">Данные пациента</h2>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold mb-2">Ф.И.О. Пациента</label>
+                      <input type="text" value={patientData.fullName} onChange={(e) => updatePatient('fullName', e.target.value)} placeholder="Иванов Иван Иванович" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold mb-2">Год рождения</label>
+                      <input type="text" value={patientData.birthYear} onChange={(e) => updatePatient('birthYear', e.target.value)} placeholder="1985" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold mb-2">Диагноз</label>
+                      <input type="text" value={patientData.diagnosis} onChange={(e) => updatePatient('diagnosis', e.target.value)} placeholder="Вульгарная пузырчатка" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold mb-2">Прямая иммунофлюоресценция</label>
+                      <select value={patientData.immunofluorescence} onChange={(e) => updatePatient('immunofluorescence', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500">
+                        <option value="">Выберите...</option>
+                        <option value="0">0 - Нет</option>
+                        <option value="+">+ Слабая</option>
+                        <option value="++">++ Умеренная</option>
+                        <option value="+++">+++ Сильная</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-lg p-6 mb-6 print:hidden">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">Визуализация поражённых областей</h2>
+                  <div className="grid grid-cols-3 gap-4">
+                    <div>
+                      <h3 className="text-base font-bold text-gray-800 mb-3 text-center">Голова</h3>
+                      <div className="w-full aspect-square bg-gray-50 rounded-lg flex items-center justify-center border border-gray-200">
+                        <svg viewBox="0 0 200 240" className="w-full h-full p-2">
+                          <ellipse cx="100" cy="100" rx="60" ry="70" fill="#d1d5db" stroke="#6b7280" strokeWidth="2"/>
+                          <ellipse cx="50" cy="100" rx="12" ry="20" fill={skinAreas.ears.erosions > 0 ? '#ef4444' : '#d1d5db'} stroke="#6b7280" strokeWidth="1.5"/>
+                          <ellipse cx="150" cy="100" rx="12" ry="20" fill={skinAreas.ears.erosions > 0 ? '#ef4444' : '#d1d5db'} stroke="#6b7280" strokeWidth="1.5"/>
+                          <path d="M 40 70 Q 100 30 160 70" fill={scalp.erosions > 0 ? '#ef4444' : '#9ca3af'} stroke="#6b7280" strokeWidth="1.5"/>
+                          <ellipse cx="80" cy="90" rx="8" ry="10" fill="white" stroke="#6b7280" strokeWidth="1"/>
+                          <ellipse cx="120" cy="90" rx="8" ry="10" fill="white" stroke="#6b7280" strokeWidth="1"/>
+                          <circle cx="80" cy="92" r="4" fill="#4b5563"/>
+                          <circle cx="120" cy="92" r="4" fill="#4b5563"/>
+                          <path d="M 100 100 L 95 120 L 100 122 L 105 120 Z" fill={skinAreas.nose.erosions > 0 ? '#ef4444' : '#b8bcc4'} stroke="#6b7280" strokeWidth="1"/>
+                          <path d="M 80 135 Q 100 145 120 135" fill="none" stroke="#6b7280" strokeWidth="2"/>
+                          <rect x="85" y="165" width="30" height="35" fill={skinAreas.neck.erosions > 0 ? '#ef4444' : '#d1d5db'} stroke="#6b7280" strokeWidth="2" rx="5"/>
+                          <ellipse cx="100" cy="120" rx="45" ry="35" fill={skinAreas.face.erosions > 0 ? 'rgba(239, 68, 68, 0.3)' : 'none'} stroke={skinAreas.face.erosions > 0 ? '#ef4444' : 'transparent'} strokeWidth="3" strokeDasharray="5,5"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-gray-800 mb-3 text-center">Полость рта</h3>
+                      <div className="w-full aspect-square bg-gray-50 rounded-lg flex items-center justify-center border border-gray-200">
+                        <svg viewBox="0 0 200 200" className="w-full h-full p-2">
+                          <ellipse cx="100" cy="100" rx="70" ry="50" fill="#e5e7eb" stroke="#6b7280" strokeWidth="2"/>
+                          <path d="M 30 100 Q 100 80 170 100" fill={mucosa.lips > 0 ? '#ef4444' : '#d1d5db'} stroke="#6b7280" strokeWidth="2"/>
+                          <path d="M 30 100 Q 100 120 170 100" fill={mucosa.lips > 0 ? '#ef4444' : '#d1d5db'} stroke="#6b7280" strokeWidth="2"/>
+                          <ellipse cx="100" cy="110" rx="35" ry="25" fill={mucosa.tongue > 0 ? '#ef4444' : '#c7cace'} stroke="#6b7280" strokeWidth="1.5"/>
+                          <path d="M 50 70 Q 100 60 150 70" fill={mucosa.hardPalate > 0 ? '#ef4444' : '#d1d5db'} stroke="#6b7280" strokeWidth="1"/>
+                          <path d="M 60 75 Q 100 85 140 75" fill={mucosa.softPalate > 0 ? '#ef4444' : '#e5e7eb'} stroke="#6b7280" strokeWidth="1"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <div>
+                      <h3 className="text-base font-bold text-gray-800 mb-3 text-center">Туловище</h3>
+                      <div className="w-full aspect-[3/4] bg-gray-50 rounded-lg flex items-center justify-center border border-gray-200">
+                        <svg viewBox="0 0 200 300" className="w-full h-full p-2">
+                          <rect x="70" y="20" width="60" height="50" fill={skinAreas.chest.erosions > 0 ? '#ef4444' : '#d1d5db'} stroke="#6b7280" strokeWidth="2" rx="10"/>
+                          <rect x="70" y="75" width="60" height="55" fill={skinAreas.abdomen.erosions > 0 ? '#ef4444' : '#d1d5db'} stroke="#6b7280" strokeWidth="2" rx="10"/>
+                          <rect x="25" y="25" width="20" height="70" fill={skinAreas.arms.erosions > 0 ? '#ef4444' : '#d1d5db'} stroke="#6b7280" strokeWidth="2" rx="10"/>
+                          <rect x="155" y="25" width="20" height="70" fill={skinAreas.arms.erosions > 0 ? '#ef4444' : '#d1d5db'} stroke="#6b7280" strokeWidth="2" rx="10"/>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+                  <h2 className="text-2xl font-bold mb-4">Кожа</h2>
+                  <div className="mb-4 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-lg text-sm">
+                    <p className="font-bold mb-2 text-gray-800">Шкала оценки эрозий/пузырей или новая эритема:</p>
+                    <ul className="space-y-1 ml-4 text-gray-700">
+                      <li><strong>0</strong> - отсутствует</li>
+                      <li><strong>1</strong> - 1-3 очага, до 1-2 см в любом диаметре, не более 6 см</li>
+                      <li><strong>2</strong> - 2-3 очага, не менее 2 очага диаметром более 2 см, не более 6 см</li>
+                      <li><strong>3</strong> - более 3 очага, не более 6 см в диаметре</li>
+                      <li><strong>5</strong> - более 3 очага, и/или хотя бы 1 очаг более 6 см</li>
+                      <li><strong>10</strong> - более 3 очага, и/или хотя бы один очаг более 16 см в диаметре или вся область</li>
+                    </ul>
+                    <p className="font-bold mt-3 mb-1 text-gray-800">Количество очагов если≤3:</p>
+                    <p className="text-gray-700">Когда число очагов на участке составляет ≤3 элементов, причём 1 элемент ≥2 см в диаметре, но нет элементов ≥6 см:</p>
+                    <ul className="space-y-1 ml-4 mt-1 text-gray-700">
+                      <li><strong>1 элемент = 1 балл</strong></li>
+                      <li><strong>2 элемента = 1.3 балла</strong></li>
+                      <li><strong>3 элемента = 1.6 баллов</strong></li>
+                    </ul>
+                    <p className="font-bold mt-3 mb-1 text-gray-800">Гиперпигментация после воспаления или эритема рассосавшегося очага:</p>
+                    <ul className="space-y-1 ml-4 text-gray-700">
+                      <li><strong>0</strong> - отсутствует</li>
+                      <li><strong>1</strong> - присутствует (количество очагов ≤3)</li>
+                    </ul>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse text-sm">
+                      <thead>
+                        <tr className="bg-indigo-50">
+                          <th className="border p-2 text-left">Анатомическое расположение</th>
+                          <th className="border p-2">Эрозии/Пузыри или новая эритема</th>
+                          <th className="border p-2">Количество очагов если≤3</th>
+                          <th className="border p-2">Гиперпигментация после воспаления</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {Object.entries(skinLabels).map(([k, l]) => (
+                          <tr key={k}>
+                            <td className="border p-2">{l}</td>
+                            <td className="border p-2">
+                              <div className="flex gap-1 justify-center print:hidden">
+                                {scores.map(s => (
+                                  <button key={s} onClick={() => updateSkin(k, 'erosions', s)} className={`px-2 py-1 text-xs rounded ${skinAreas[k].erosions === s ? 'bg-indigo-600 text-white' : 'bg-gray-100 hover:bg-gray-200'}`}>{s}</button>
+                                ))}
+                              </div>
+                              <div className="hidden print:block text-center">{skinAreas[k].erosions}</div>
+                            </td>
+                            <td className="border p-2">
+                              <select value={skinAreas[k].lesionCount} onChange={(e) => updateSkin(k, 'lesionCount', e.target.value)} className="w-full px-2 py-1 border rounded text-xs">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                              </select>
+                            </td>
+                            <td className="border p-2">
+                              <select value={skinAreas[k].pigmentation} onChange={(e) => updateSkin(k, 'pigmentation', e.target.value)} className="w-full px-2 py-1 border rounded text-xs">
+                                <option value="0">0</option>
+                                <option value="1">1</option>
+                              </select>
+                            </td>
+                          </tr>
+                        ))}
+                        <tr className="bg-indigo-100 font-bold">
+                          <td className="border p-2">Вся поверхность кожи:</td>
+                          <td className="border p-2 text-center">{totals.skinErosions}</td>
+                          <td className="border p-2 text-center">{totals.skinLesionCount.toFixed(1)}</td>
+                          <td className="border p-2 text-center">{totals.skinPigmentation}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+                  <h2 className="text-2xl font-bold mb-4">Кожа головы</h2>
+                  <div className="mb-4 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-lg text-sm">
+                    <p className="font-bold mb-2 text-gray-800">Шкала оценки эрозий/пузырей или новая эритема:</p>
+                    <ul className="space-y-1 ml-4 text-gray-700">
+                      <li><strong>0</strong> - отсутствует</li>
+                      <li><strong>1</strong> - в одном квадранте</li>
+                      <li><strong>2</strong> - два квадранта</li>
+                      <li><strong>3</strong> - три квадранта</li>
+                      <li><strong>4</strong> - затрагивает всю поверхность черепа</li>
+                      <li><strong>10</strong> - как минимум 1 очаг более 6 см</li>
+                    </ul>
+                    <p className="font-bold mt-3 mb-1 text-gray-800">Количество очагов если≤3:</p>
+                    <p className="text-gray-700">Когда число очагов на участке составляет ≤3 элементов, причём 1 элемент ≥2 см в диаметре, но нет элементов ≥6 см:</p>
+                    <ul className="space-y-1 ml-4 mt-1 text-gray-700">
+                      <li><strong>1 элемент = 1 балл</strong></li>
+                      <li><strong>2 элемента = 1.3 балла</strong></li>
+                      <li><strong>3 элемента = 1.6 баллов</strong></li>
+                    </ul>
+                    <p className="font-bold mt-3 mb-1 text-gray-800">Гиперпигментация после воспаления или эритема рассосавшегося очага:</p>
+                    <ul className="space-y-1 ml-4 text-gray-700">
+                      <li><strong>0</strong> - отсутствует</li>
+                      <li><strong>1</strong> - присутствует (количество очагов ≤3)</li>
+                    </ul>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse text-sm">
+                      <thead>
+                        <tr className="bg-indigo-50">
+                          <th className="border p-2 text-left">Кожа головы</th>
+                          <th className="border p-2">Эрозии/Пузыри или новая эритема</th>
+                          <th className="border p-2">Количество очагов если≤3</th>
+                          <th className="border p-2">Гиперпигментация после воспаления</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td className="border p-2">Кожа головы</td>
+                          <td className="border p-2">
+                            <div className="flex gap-1 justify-center print:hidden">
+                              {scores.map(s => (
+                                <button key={s} onClick={() => updateScalp('erosions', s)} className={`px-2 py-1 text-xs rounded ${scalp.erosions === s ? 'bg-indigo-600 text-white' : 'bg-gray-100 hover:bg-gray-200'}`}>{s}</button>
+                              ))}
+                            </div>
+                            <div className="hidden print:block text-center">{scalp.erosions}</div>
+                          </td>
+                          <td className="border p-2">
+                            <select value={scalp.lesionCount} onChange={(e) => updateScalp('lesionCount', e.target.value)} className="w-full px-2 py-1 border rounded text-xs">
+                              <option value="0">0</option>
+                              <option value="1">1</option>
+                              <option value="2">2</option>
+                              <option value="3">3</option>
+                            </select>
+                          </td>
+                          <td className="border p-2">
+                            <select value={scalp.pigmentation} onChange={(e) => updateScalp('pigmentation', e.target.value)} className="w-full px-2 py-1 border rounded text-xs">
+                              <option value="0">0</option>
+                              <option value="1">1</option>
+                            </select>
+                          </td>
+                        </tr>
+                        <tr className="bg-indigo-100 font-bold">
+                          <td className="border p-2">Вся поверхность кожи головы (0-10):</td>
+                          <td className="border p-2 text-center">{totals.scalpErosions}</td>
+                          <td className="border p-2 text-center">{totals.scalpLesionCount.toFixed(1)}</td>
+                          <td className="border p-2 text-center">{totals.scalpPigmentation}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+                  <h2 className="text-2xl font-bold mb-4">Слизистая оболочка</h2>
+                  <div className="mb-4 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-lg text-sm">
+                    <p className="font-bold mb-2 text-gray-800">Шкала оценки эрозий/пузырей:</p>
+                    <ul className="space-y-1 ml-4 text-gray-700">
+                      <li><strong>0</strong> - отсутствует</li>
+                      <li><strong>1</strong> - 1 очаг</li>
+                      <li><strong>2</strong> - 2-3 очага</li>
+                      <li><strong>5</strong> - больше 3 очагов или 2 очага более 2 см</li>
+                      <li><strong>10</strong> - вся площадь</li>
+                    </ul>
+                    <p className="font-bold mt-3 mb-1 text-gray-800">Примечание:</p>
+                    <p className="text-gray-700">Для слизистых оболочек количество очагов учитывается в основной оценке. Дополнительный подсчет количества очагов не требуется.</p>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse text-sm">
+                      <thead>
+                        <tr className="bg-indigo-50">
+                          <th className="border p-2 text-left">Анатомическое расположение</th>
+                          <th className="border p-2">Эрозии/Пузыри</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {Object.entries(mucosaLabels).map(([k, l]) => (
+                          <tr key={k}>
+                            <td className="border p-2">{l}</td>
+                            <td className="border p-2">
+                              <div className="flex gap-1 justify-center print:hidden">
+                                {scores.map(s => (
+                                  <button key={s} onClick={() => updateMucosa(k, s)} className={`px-2 py-1 text-xs rounded ${mucosa[k] === s ? 'bg-indigo-600 text-white' : 'bg-gray-100 hover:bg-gray-200'}`}>{s}</button>
+                                ))}
+                              </div>
+                              <div className="hidden print:block text-center">{mucosa[k]}</div>
+                            </td>
+                          </tr>
+                        ))}
+                        <tr className="bg-indigo-100 font-bold">
+                          <td className="border p-2">Вся слизистая оболочка:</td>
+                          <td className="border p-2 text-center">{totals.mucosaTotal}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-lg p-8 text-white mb-6">
+                  <h2 className="text-3xl font-bold mb-6 text-center">Итоговые баллы PDAI</h2>
+                  <div className="grid md:grid-cols-4 gap-4">
+                    <div className="bg-white bg-opacity-20 rounded-lg p-4">
+                      <p className="text-sm mb-1">Общий балл тяжести течения:</p>
+                      <p className="text-4xl font-bold">{totals.overallSeverity.toFixed(1)}</p>
+                      <p className="text-xs mt-1 opacity-80">(Максимум: 250)</p>
+                    </div>
+                    <div className="bg-white bg-opacity-20 rounded-lg p-4">
+                      <p className="text-sm mb-1">Общий балл степени поражения:</p>
+                      <p className="text-4xl font-bold">{totals.overallDamage}</p>
+                      <p className="text-xs mt-1 opacity-80">(Максимум: 13)</p>
+                    </div>
+                    <div className="bg-white bg-opacity-20 rounded-lg p-4">
+                      <p className="text-sm mb-1">Общий балл PDAI:</p>
+                      <p className="text-4xl font-bold">{totals.totalScore.toFixed(1)}</p>
+                      <p className="text-xs mt-1 opacity-80">(Максимум: 263)</p>
+                    </div>
+                    <div className={`rounded-lg p-4 border-2 ${sev.color}`}>
+                      <SevIcon />
+                      <p className="text-base font-bold mt-2">Степень тяжести:</p>
+                      <p className="text-xl font-bold">{sev.level}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-lg p-6 mb-6">
+                  <h2 className="text-2xl font-bold mb-4">Рекомендации врача</h2>
+                  <textarea value={recommendations} onChange={(e) => setRecommendations(e.target.value)} rows="6" className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-indigo-500" placeholder="Введите рекомендации для пациента..."></textarea>
+                </div>
+
+                <div className="bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl shadow-lg p-6 text-white mb-6">
+                  <div className="flex gap-4">
+                    <Info />
+                    <div>
+                      <h2 className="text-2xl font-bold mb-3">Информация о PDAI</h2>
+                      <p className="text-sm mb-3">PDAI (Pemphigus Disease Area Index) — стандартизированная шкала для оценки тяжести пузырчатки.</p>
+                      <div className="text-sm space-y-2">
+                        <p><strong>Интерпретация результатов:</strong></p>
+                        <ul className="list-disc ml-5">
+                          <li>Легкая степень: меньше 15 баллов</li>
+                          <li>Средняя степень: 15-45 баллов</li>
+                          <li>Тяжелая степень: больше 45 баллов</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-center text-gray-600 text-sm">
+                  <p>© 2024 Skin Lab Pro by itsmegauka</p>
+                  <p className="mt-1 text-xs">Для медицинского использования</p>
+                </div>
+              </div>
+            </div>
+          );
+        };
+
+        ReactDOM.render(<PDAICalculator />, document.getElementById('root'));
+    </script>
+</body>
+</html>

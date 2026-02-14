@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://pdai-calculator.example.com/sitemap.xml
