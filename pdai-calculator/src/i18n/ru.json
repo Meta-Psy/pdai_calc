@@ -12,7 +12,10 @@
     "print": "Печать",
     "downloadPdf": "Скачать PDF",
     "pdfLoading": "Генерация...",
-    "reset": "Сбросить"
+    "reset": "Сбросить",
+    "resetConfirm": "Вы уверены? Все данные будут удалены.",
+    "undo": "Отменить",
+    "more": "Ещё"
   },
   "patient": {
     "title": "Данные пациента",
@@ -140,5 +143,8 @@
     "copyright": "© 2024-2026 Skin Lab Pro by itsmegauka",
     "medical": "Для медицинского использования"
   },
-  "printHeader": "PDAI Calculator | Дата:"
+  "printHeader": "PDAI Calculator | Дата:",
+  "guide": {
+    "toggle": "Шкала оценки"
+  }
 }

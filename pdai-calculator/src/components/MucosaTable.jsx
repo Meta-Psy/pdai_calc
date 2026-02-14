@@ -1,24 +1,37 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { MUCOSA_KEYS, SCORES } from '../hooks/useCalculator';
+import ScoreButtons from './ScoreButtons';
 
 export default function MucosaTable({ mucosa, totals, updateMucosa }) {
   const { t } = useTranslation();
+  const [showGuide, setShowGuide] = useState(false);
+  const [activeRow, setActiveRow] = useState(null);
 
   return (
     <section className="bg-white rounded-xl shadow-lg p-6 mb-6" aria-labelledby="mucosa-title">
       <h2 id="mucosa-title" className="text-2xl font-bold mb-4">{t('mucosa.title')}</h2>
-      <div className="mb-4 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-lg text-sm no-print">
-        <p className="font-bold mb-2 text-gray-800">{t('mucosa.scaleTitle')}</p>
-        <ul className="space-y-1 ml-4 text-gray-700">
-          <li><strong>0</strong> — {t('mucosa.scale0').replace('0 — ', '')}</li>
-          <li><strong>1</strong> — {t('mucosa.scale1').replace('1 — ', '')}</li>
-          <li><strong>2</strong> — {t('mucosa.scale2').replace('2 — ', '')}</li>
-          <li><strong>5</strong> — {t('mucosa.scale5').replace('5 — ', '')}</li>
-          <li><strong>10</strong> — {t('mucosa.scale10').replace('10 — ', '')}</li>
-        </ul>
-        <p className="font-bold mt-3 mb-1 text-gray-800">{t('mucosa.note')}</p>
-        <p className="text-gray-700">{t('mucosa.noteText')}</p>
-      </div>
+      <button
+        onClick={() => setShowGuide(!showGuide)}
+        className="mb-4 flex items-center gap-2 text-sm font-medium text-indigo-700 hover:text-indigo-900 no-print"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={`transition-transform ${showGuide ? 'rotate-90' : ''}`}><path d="m9 18 6-6-6-6"/></svg>
+        {t('guide.toggle')}
+      </button>
+      {showGuide && (
+        <div className="mb-4 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-lg text-sm no-print">
+          <p className="font-bold mb-2 text-gray-800">{t('mucosa.scaleTitle')}</p>
+          <ul className="space-y-1 ml-4 text-gray-700">
+            <li><strong>0</strong> — {t('mucosa.scale0').replace('0 — ', '')}</li>
+            <li><strong>1</strong> — {t('mucosa.scale1').replace('1 — ', '')}</li>
+            <li><strong>2</strong> — {t('mucosa.scale2').replace('2 — ', '')}</li>
+            <li><strong>5</strong> — {t('mucosa.scale5').replace('5 — ', '')}</li>
+            <li><strong>10</strong> — {t('mucosa.scale10').replace('10 — ', '')}</li>
+          </ul>
+          <p className="font-bold mt-3 mb-1 text-gray-800">{t('mucosa.note')}</p>
+          <p className="text-gray-700">{t('mucosa.noteText')}</p>
+        </div>
+      )}
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-sm">
           <thead>
@@ -29,13 +42,23 @@ export default function MucosaTable({ mucosa, totals, updateMucosa }) {
           </thead>
           <tbody>
             {MUCOSA_KEYS.map(k => (
-              <tr key={k}>
-                <td className="border px-2">{t(`mucosa.${k}`)}</td>
+              <tr
+                key={k}
+                className={`transition-colors ${activeRow === k ? 'bg-indigo-50/70' : ''}`}
+                onFocus={() => setActiveRow(k)}
+                onMouseEnter={() => setActiveRow(k)}
+                onMouseLeave={() => setActiveRow(null)}
+                onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setActiveRow(null); }}
+              >
                 <td className="border px-2">
-                  <div className="flex gap-1 justify-center items-center no-print">
-                    {SCORES.map(s => (
-                      <button key={s} onClick={() => updateMucosa(k, s)} className={`px-2 py-1 text-xs rounded ${mucosa[k] === s ? 'bg-indigo-600 text-white' : 'bg-gray-100 hover:bg-gray-200'}`}>{s}</button>
-                    ))}
+                  <span className="flex items-center gap-1.5">
+                    {mucosa[k] > 0 && <span className="inline-block w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" />}
+                    {t(`mucosa.${k}`)}
+                  </span>
+                </td>
+                <td className="border px-2">
+                  <div className="no-print">
+                    <ScoreButtons scores={SCORES} value={mucosa[k]} onChange={v => updateMucosa(k, v)} />
                   </div>
                   <div className="hidden print-only text-center">{mucosa[k]}</div>
                 </td>

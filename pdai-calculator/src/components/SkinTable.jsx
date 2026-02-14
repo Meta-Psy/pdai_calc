@@ -1,35 +1,50 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { SKIN_KEYS, SCORES } from '../hooks/useCalculator';
+import { SKIN_KEYS, SCORES, LESION_COUNTS, PIGMENTATION_SCORES } from '../hooks/useCalculator';
+import ScoreButtons from './ScoreButtons';
 
 export default function SkinTable({ skinAreas, totals, updateSkin }) {
   const { t } = useTranslation();
+  const [showGuide, setShowGuide] = useState(false);
+  const [activeRow, setActiveRow] = useState(null);
+
+  const hasValue = (k) => skinAreas[k].erosions > 0 || skinAreas[k].lesionCount > 0 || skinAreas[k].pigmentation > 0;
 
   return (
     <section className="bg-white rounded-xl shadow-lg p-6 mb-6" aria-labelledby="skin-title">
       <h2 id="skin-title" className="text-2xl font-bold mb-4">{t('skin.title')}</h2>
-      <div className="mb-4 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-lg text-sm no-print">
-        <p className="font-bold mb-2 text-gray-800">{t('skin.scaleTitle')}</p>
-        <ul className="space-y-1 ml-4 text-gray-700">
-          <li><strong>0</strong> — {t('skin.scale0').replace('0 — ', '')}</li>
-          <li><strong>1</strong> — {t('skin.scale1').replace('1 — ', '')}</li>
-          <li><strong>2</strong> — {t('skin.scale2').replace('2 — ', '')}</li>
-          <li><strong>3</strong> — {t('skin.scale3').replace('3 — ', '')}</li>
-          <li><strong>5</strong> — {t('skin.scale5').replace('5 — ', '')}</li>
-          <li><strong>10</strong> — {t('skin.scale10').replace('10 — ', '')}</li>
-        </ul>
-        <p className="font-bold mt-3 mb-1 text-gray-800">{t('skin.lesionTitle')}</p>
-        <p className="text-gray-700">{t('skin.lesionDesc')}</p>
-        <ul className="space-y-1 ml-4 mt-1 text-gray-700">
-          <li><strong>{t('skin.lesion1')}</strong></li>
-          <li><strong>{t('skin.lesion2')}</strong></li>
-          <li><strong>{t('skin.lesion3')}</strong></li>
-        </ul>
-        <p className="font-bold mt-3 mb-1 text-gray-800">{t('skin.pigmentationTitle')}</p>
-        <ul className="space-y-1 ml-4 text-gray-700">
-          <li><strong>0</strong> — {t('skin.pigmentation0').replace('0 — ', '')}</li>
-          <li><strong>1</strong> — {t('skin.pigmentation1').replace('1 — ', '')}</li>
-        </ul>
-      </div>
+      <button
+        onClick={() => setShowGuide(!showGuide)}
+        className="mb-4 flex items-center gap-2 text-sm font-medium text-indigo-700 hover:text-indigo-900 no-print"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={`transition-transform ${showGuide ? 'rotate-90' : ''}`}><path d="m9 18 6-6-6-6"/></svg>
+        {t('guide.toggle')}
+      </button>
+      {showGuide && (
+        <div className="mb-4 p-4 bg-yellow-50 border-2 border-yellow-300 rounded-lg text-sm no-print">
+          <p className="font-bold mb-2 text-gray-800">{t('skin.scaleTitle')}</p>
+          <ul className="space-y-1 ml-4 text-gray-700">
+            <li><strong>0</strong> — {t('skin.scale0').replace('0 — ', '')}</li>
+            <li><strong>1</strong> — {t('skin.scale1').replace('1 — ', '')}</li>
+            <li><strong>2</strong> — {t('skin.scale2').replace('2 — ', '')}</li>
+            <li><strong>3</strong> — {t('skin.scale3').replace('3 — ', '')}</li>
+            <li><strong>5</strong> — {t('skin.scale5').replace('5 — ', '')}</li>
+            <li><strong>10</strong> — {t('skin.scale10').replace('10 — ', '')}</li>
+          </ul>
+          <p className="font-bold mt-3 mb-1 text-gray-800">{t('skin.lesionTitle')}</p>
+          <p className="text-gray-700">{t('skin.lesionDesc')}</p>
+          <ul className="space-y-1 ml-4 mt-1 text-gray-700">
+            <li><strong>{t('skin.lesion1')}</strong></li>
+            <li><strong>{t('skin.lesion2')}</strong></li>
+            <li><strong>{t('skin.lesion3')}</strong></li>
+          </ul>
+          <p className="font-bold mt-3 mb-1 text-gray-800">{t('skin.pigmentationTitle')}</p>
+          <ul className="space-y-1 ml-4 text-gray-700">
+            <li><strong>0</strong> — {t('skin.pigmentation0').replace('0 — ', '')}</li>
+            <li><strong>1</strong> — {t('skin.pigmentation1').replace('1 — ', '')}</li>
+          </ul>
+        </div>
+      )}
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-sm">
           <thead>
@@ -42,25 +57,37 @@ export default function SkinTable({ skinAreas, totals, updateSkin }) {
           </thead>
           <tbody>
             {SKIN_KEYS.map(k => (
-              <tr key={k}>
-                <td className="border px-2">{t(`skin.${k}`)}</td>
+              <tr
+                key={k}
+                className={`transition-colors ${activeRow === k ? 'bg-indigo-50/70' : ''}`}
+                onFocus={() => setActiveRow(k)}
+                onMouseEnter={() => setActiveRow(k)}
+                onMouseLeave={() => setActiveRow(null)}
+                onBlur={(e) => { if (!e.currentTarget.contains(e.relatedTarget)) setActiveRow(null); }}
+              >
                 <td className="border px-2">
-                  <div className="flex gap-1 justify-center items-center no-print">
-                    {SCORES.map(s => (
-                      <button key={s} onClick={() => updateSkin(k, 'erosions', s)} className={`px-1.5 md:px-2 py-1 text-xs rounded min-w-[24px] ${skinAreas[k].erosions === s ? 'bg-indigo-600 text-white' : 'bg-gray-100 hover:bg-gray-200'}`}>{s}</button>
-                    ))}
+                  <span className="flex items-center gap-1.5">
+                    {hasValue(k) && <span className="inline-block w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" />}
+                    {t(`skin.${k}`)}
+                  </span>
+                </td>
+                <td className="border px-2">
+                  <div className="no-print">
+                    <ScoreButtons scores={SCORES} value={skinAreas[k].erosions} onChange={v => updateSkin(k, 'erosions', v)} />
                   </div>
                   <div className="hidden print-only text-center">{skinAreas[k].erosions}</div>
                 </td>
-                <td className="border px-2 text-center">
-                  <select value={skinAreas[k].lesionCount} onChange={e => updateSkin(k, 'lesionCount', e.target.value)} className="px-2 py-1 border rounded text-xs text-center">
-                    <option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option>
-                  </select>
+                <td className="border px-2">
+                  <div className="no-print">
+                    <ScoreButtons scores={LESION_COUNTS} value={skinAreas[k].lesionCount} onChange={v => updateSkin(k, 'lesionCount', v)} />
+                  </div>
+                  <div className="hidden print-only text-center">{skinAreas[k].lesionCount}</div>
                 </td>
-                <td className="border px-2 text-center">
-                  <select value={skinAreas[k].pigmentation} onChange={e => updateSkin(k, 'pigmentation', e.target.value)} className="px-2 py-1 border rounded text-xs text-center">
-                    <option value="0">0</option><option value="1">1</option>
-                  </select>
+                <td className="border px-2">
+                  <div className="no-print">
+                    <ScoreButtons scores={PIGMENTATION_SCORES} value={skinAreas[k].pigmentation} onChange={v => updateSkin(k, 'pigmentation', v)} />
+                  </div>
+                  <div className="hidden print-only text-center">{skinAreas[k].pigmentation}</div>
                 </td>
               </tr>
             ))}

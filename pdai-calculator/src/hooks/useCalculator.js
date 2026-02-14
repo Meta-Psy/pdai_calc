@@ -1,4 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+
+const STORAGE_KEY = 'pdai-calculator-data';
+const MAX_HISTORY = 50;
 
 const INITIAL_SKIN = {
   ears: { erosions: 0, pigmentation: 0, lesionCount: 0 },
@@ -25,6 +28,14 @@ const INITIAL_MUCOSA = {
 
 const INITIAL_PATIENT = { fullName: '', birthYear: '', diagnosis: '', immunofluorescence: '' };
 
+function loadSaved() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch { /* ignore */ }
+  return null;
+}
+
 function calculateLesionScore(count) {
   if (count === 1) return 1;
   if (count === 2) return 1.3;
@@ -33,11 +44,67 @@ function calculateLesionScore(count) {
 }
 
 export function useCalculator() {
-  const [patientData, setPatientData] = useState(INITIAL_PATIENT);
-  const [recommendations, setRecommendations] = useState('');
-  const [skinAreas, setSkinAreas] = useState(INITIAL_SKIN);
-  const [scalp, setScalp] = useState(INITIAL_SCALP);
-  const [mucosa, setMucosa] = useState(INITIAL_MUCOSA);
+  const saved = loadSaved();
+
+  const [patientData, setPatientData] = useState(saved?.patientData || INITIAL_PATIENT);
+  const [recommendations, setRecommendations] = useState(saved?.recommendations || '');
+  const [skinAreas, setSkinAreas] = useState(saved?.skinAreas || INITIAL_SKIN);
+  const [scalp, setScalp] = useState(saved?.scalp || INITIAL_SCALP);
+  const [mucosa, setMucosa] = useState(saved?.mucosa || INITIAL_MUCOSA);
+
+  // Undo history — only for score changes (skin, scalp, mucosa)
+  const [history, setHistory] = useState([]);
+  const isUndoing = useRef(false);
+
+  const pushHistory = useCallback(() => {
+    if (isUndoing.current) return;
+    setHistory(prev => {
+      const snapshot = { skinAreas, scalp, mucosa };
+      const next = [...prev, snapshot];
+      return next.length > MAX_HISTORY ? next.slice(-MAX_HISTORY) : next;
+    });
+  }, [skinAreas, scalp, mucosa]);
+
+  const undo = useCallback(() => {
+    setHistory(prev => {
+      if (prev.length === 0) return prev;
+      const newHistory = [...prev];
+      const snapshot = newHistory.pop();
+      isUndoing.current = true;
+      setSkinAreas(snapshot.skinAreas);
+      setScalp(snapshot.scalp);
+      setMucosa(snapshot.mucosa);
+      // Reset flag after state updates are flushed
+      setTimeout(() => { isUndoing.current = false; }, 0);
+      return newHistory;
+    });
+  }, []);
+
+  const canUndo = history.length > 0;
+
+  // Ctrl+Z global handler
+  useEffect(() => {
+    const handler = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+        // Don't intercept if focus is in text input/textarea
+        const tag = document.activeElement?.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+        e.preventDefault();
+        undo();
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [undo]);
+
+  // Auto-save to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        patientData, recommendations, skinAreas, scalp, mucosa,
+      }));
+    } catch { /* ignore */ }
+  }, [patientData, recommendations, skinAreas, scalp, mucosa]);
 
   const totals = useMemo(() => {
     const se = Object.values(skinAreas).reduce((s, a) => s + a.erosions, 0);
@@ -58,17 +125,20 @@ export function useCalculator() {
   const updatePatient = (f, v) => setPatientData(p => ({ ...p, [f]: v }));
 
   const updateSkin = (area, field, value) => {
-    const n = value === '' ? 0 : parseInt(value);
+    pushHistory();
+    const n = typeof value === 'number' ? value : (value === '' ? 0 : parseInt(value));
     setSkinAreas(p => ({ ...p, [area]: { ...p[area], [field]: isNaN(n) ? 0 : n } }));
   };
 
   const updateScalp = (field, value) => {
-    const n = value === '' ? 0 : parseInt(value);
+    pushHistory();
+    const n = typeof value === 'number' ? value : (value === '' ? 0 : parseInt(value));
     setScalp(p => ({ ...p, [field]: isNaN(n) ? 0 : n }));
   };
 
   const updateMucosa = (area, value) => {
-    const n = value === '' ? 0 : parseInt(value);
+    pushHistory();
+    const n = typeof value === 'number' ? value : (value === '' ? 0 : parseInt(value));
     setMucosa(p => ({ ...p, [area]: isNaN(n) ? 0 : n }));
   };
 
@@ -78,6 +148,8 @@ export function useCalculator() {
     setSkinAreas(INITIAL_SKIN);
     setScalp(INITIAL_SCALP);
     setMucosa(INITIAL_MUCOSA);
+    setHistory([]);
+    try { localStorage.removeItem(STORAGE_KEY); } catch { /* ignore */ }
   };
 
   const getSeverity = (score, t) => {
@@ -90,6 +162,7 @@ export function useCalculator() {
     patientData, recommendations, skinAreas, scalp, mucosa, totals,
     updatePatient, updateSkin, updateScalp, updateMucosa,
     setRecommendations, reset, getSeverity,
+    undo, canUndo,
   };
 }
 
@@ -97,3 +170,5 @@ export const SKIN_KEYS = Object.keys(INITIAL_SKIN);
 export const MUCOSA_KEYS = Object.keys(INITIAL_MUCOSA);
 export const SCORES = [0, 1, 2, 3, 5, 10];
 export const SCALP_SCORES = [0, 1, 2, 3, 4, 10];
+export const LESION_COUNTS = [0, 1, 2, 3];
+export const PIGMENTATION_SCORES = [0, 1];

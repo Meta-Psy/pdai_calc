@@ -12,7 +12,10 @@
     "print": "Басып шығарыў",
     "downloadPdf": "PDF жүклеп алыў",
     "pdfLoading": "Жаратылмақта...",
-    "reset": "Тазалаў"
+    "reset": "Тазалаў",
+    "resetConfirm": "Исенимиңиз бар ма? Барлық мағлыўматлар өшириледи.",
+    "undo": "Артқа қайтарыў",
+    "more": "Тағы"
   },
   "patient": {
     "title": "Наўқас мағлыўматлары",
@@ -140,5 +143,8 @@
     "copyright": "© 2024-2026 Skin Lab Pro by itsmegauka",
     "medical": "Медициналық пайдаланыў ушын"
   },
-  "printHeader": "PDAI Calculator | Сәне:"
+  "printHeader": "PDAI Calculator | Сәне:",
+  "guide": {
+    "toggle": "Баҳалаў шкаласы"
+  }
 }

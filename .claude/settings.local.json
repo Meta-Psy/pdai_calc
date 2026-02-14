@@ -10,7 +10,12 @@
       "Bash(npx vite:*)",
       "Bash(ls:*)",
       "Bash(npm run lint)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "WebFetch(domain:www.nngroup.com)",
+      "WebFetch(domain:www.pencilandpaper.io)",
+      "WebFetch(domain:www.smashingmagazine.com)",
+      "WebFetch(domain:pmc.ncbi.nlm.nih.gov)",
+      "WebFetch(domain:blog.pocp.com)"
     ]
   }
 }

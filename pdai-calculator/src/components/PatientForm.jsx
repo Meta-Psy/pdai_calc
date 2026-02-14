@@ -20,14 +20,27 @@ export default function PatientForm({ patientData, updatePatient }) {
           <input id="diagnosis" type="text" value={patientData.diagnosis} onChange={e => updatePatient('diagnosis', e.target.value)} placeholder={t('patient.diagnosisPlaceholder')} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
         </div>
         <div>
-          <label htmlFor="immunofluorescence" className="block text-sm font-semibold mb-2">{t('patient.immunofluorescence')}</label>
-          <select id="immunofluorescence" value={patientData.immunofluorescence} onChange={e => updatePatient('immunofluorescence', e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-            <option value="">{t('patient.selectPlaceholder')}</option>
-            <option value="0">{t('patient.ifNone')}</option>
-            <option value="+">{t('patient.ifWeak')}</option>
-            <option value="++">{t('patient.ifModerate')}</option>
-            <option value="+++">{t('patient.ifStrong')}</option>
-          </select>
+          <label className="block text-sm font-semibold mb-2">{t('patient.immunofluorescence')}</label>
+          <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={t('patient.immunofluorescence')}>
+            {[
+              { value: '0', label: t('patient.ifNone') },
+              { value: '+', label: t('patient.ifWeak') },
+              { value: '++', label: t('patient.ifModerate') },
+              { value: '+++', label: t('patient.ifStrong') },
+            ].map(opt => (
+              <button
+                key={opt.value}
+                type="button"
+                role="radio"
+                aria-checked={patientData.immunofluorescence === opt.value}
+                onClick={() => updatePatient('immunofluorescence', patientData.immunofluorescence === opt.value ? '' : opt.value)}
+                className={`px-3 py-2 rounded-lg text-sm transition-colors ${patientData.immunofluorescence === opt.value ? 'bg-indigo-600 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          <div className="hidden print-only text-sm mt-1">{patientData.immunofluorescence || '—'}</div>
         </div>
       </div>
     </section>

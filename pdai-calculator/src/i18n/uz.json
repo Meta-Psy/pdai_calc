@@ -12,7 +12,10 @@
     "print": "Chop etish",
     "downloadPdf": "PDF yuklab olish",
     "pdfLoading": "Yaratilmoqda...",
-    "reset": "Tozalash"
+    "reset": "Tozalash",
+    "resetConfirm": "Ishonchingiz komilmi? Barcha ma'lumotlar o'chiriladi.",
+    "undo": "Bekor qilish",
+    "more": "Ko'proq"
   },
   "patient": {
     "title": "Bemor ma'lumotlari",
@@ -140,5 +143,8 @@
     "copyright": "© 2024-2026 Skin Lab Pro by itsmegauka",
     "medical": "Tibbiy foydalanish uchun"
   },
-  "printHeader": "PDAI Calculator | Sana:"
+  "printHeader": "PDAI Calculator | Sana:",
+  "guide": {
+    "toggle": "Baholash shkalasi"
+  }
 }
