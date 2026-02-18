@@ -107,17 +107,15 @@ table select {
     color: black !important;
   }
 
-  /* Scale to fit 1 page — visualization now visible */
+  /* Scale to fit 1 page — zoom changes actual layout size (unlike transform) */
+  /* so the browser paginates correctly at the zoomed height */
   #root {
-    transform: scale(0.68);
-    transform-origin: top left;
-    width: 147.1%; /* 100 / 0.68 */
+    zoom: 0.68;
   }
 
   /* Slightly smaller when recommendations are present */
   #root:has(.has-recommendations) {
-    transform: scale(0.63);
-    width: 158.7%; /* 100 / 0.63 */
+    zoom: 0.63;
   }
 
   /* Force print colors */
@@ -316,12 +314,17 @@ table select {
   }
 
   .print-viz h3 {
-    font-size: 7pt !important;
+    font-size: 6pt !important;
     margin-bottom: 0 !important;
   }
 
+  .print-viz .grid {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 3px !important;
+  }
+
   .print-viz svg {
-    max-height: 160px !important;
+    max-height: 130px !important;
   }
 
   .print-viz .text-xs {
