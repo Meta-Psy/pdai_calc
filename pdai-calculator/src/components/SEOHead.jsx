@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-const SITE_URL = 'https://pdai-calculator.example.com';
+const SITE_URL = 'https://skinlabpro.uz';
 const LANGS = ['ru', 'en', 'uz', 'kk'];
 
 export default function SEOHead() {
