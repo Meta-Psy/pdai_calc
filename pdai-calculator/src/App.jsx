@@ -65,7 +65,7 @@ export default function App() {
     <>
       <SEOHead />
 
-      <div className={`min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50 p-4 md:p-8 pb-16 ${calc.recommendations.trim() ? 'has-recommendations' : ''}`}>
+      <div className={`min-h-screen bg-linear-to-br from-blue-50 to-indigo-50 p-4 md:p-8 pb-16 ${calc.recommendations.trim() ? 'has-recommendations' : ''}`}>
         <div className="max-w-7xl mx-auto">
 
           {/* Header — clean, no action buttons */}

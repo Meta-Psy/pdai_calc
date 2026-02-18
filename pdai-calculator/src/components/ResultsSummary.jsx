@@ -6,7 +6,7 @@ export default function ResultsSummary({ totals, getSeverity }) {
   const sev = getSeverity(totals.overallSeverity, t);
 
   return (
-    <section className="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-lg p-4 md:p-8 text-white mb-6 print-results" aria-labelledby="results-title">
+    <section className="bg-linear-to-r from-indigo-600 to-purple-600 rounded-xl shadow-lg p-4 md:p-8 text-white mb-6 print-results" aria-labelledby="results-title">
       <h2 id="results-title" className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 text-center">{t('results.title')}</h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
         <div className="bg-white/20 rounded-lg p-3 md:p-4">

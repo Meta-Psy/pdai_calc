@@ -133,7 +133,7 @@ table select {
     background: white !important;
   }
 
-  .bg-gradient-to-br {
+  .bg-linear-to-br {
     background: white !important;
   }
 
@@ -260,7 +260,7 @@ table select {
     font-size: 6pt !important;
   }
 
-  .bg-gradient-to-r {
+  .bg-linear-to-r {
     background: #4f46e5 !important;
     padding: 4px 6px !important;
   }
