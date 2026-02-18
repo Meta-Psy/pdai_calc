@@ -45,15 +45,7 @@ if [ $STAGING -eq 1 ]; then
   STAGING_ARG="--staging"
 fi
 
-docker compose run --rm certbot certonly \
-  --webroot \
-  --webroot-path=/var/www/certbot \
-  $STAGING_ARG \
-  --email "$EMAIL" \
-  --agree-tos \
-  --no-eff-email \
-  -d "$DOMAIN" \
-  -d "www.$DOMAIN"
+docker compose run --rm --entrypoint "certbot certonly --webroot --webroot-path=/var/www/certbot $STAGING_ARG --email $EMAIL --agree-tos --no-eff-email -d $DOMAIN -d www.$DOMAIN" certbot
 
 echo "### Reloading nginx with real certificate..."
 docker compose exec app nginx -s reload
