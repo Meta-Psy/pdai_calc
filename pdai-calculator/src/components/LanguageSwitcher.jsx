@@ -45,13 +45,21 @@ const languages = [
     code: 'kk',
     label: 'КК',
     flag: (
-      <svg viewBox="0 0 640 480" width="20" height="15" aria-hidden="true">
-        <rect width="640" height="160" fill="#0099b5"/>
-        <rect y="160" width="640" height="40" fill="#ce1126"/>
-        <rect y="200" width="640" height="80" fill="#fff"/>
-        <rect y="280" width="640" height="40" fill="#ce1126"/>
-        <rect y="320" width="640" height="160" fill="#1eb53a"/>
-        <text x="320" y="260" textAnchor="middle" fontSize="60" fontWeight="bold" fill="#0099b5">QQ</text>
+      <svg viewBox="0 0 640 320" width="20" height="10" aria-hidden="true">
+        <rect width="640" height="108" fill="#0099b5"/>
+        <rect y="108" width="640" height="6" fill="#ce1126"/>
+        <rect y="114" width="640" height="3" fill="#fff"/>
+        <rect y="117" width="640" height="87" fill="#ffd700"/>
+        <rect y="204" width="640" height="3" fill="#fff"/>
+        <rect y="207" width="640" height="6" fill="#ce1126"/>
+        <rect y="213" width="640" height="107" fill="#1eb53a"/>
+        <circle cx="90" cy="54" r="24" fill="#fff"/>
+        <circle cx="100" cy="54" r="20" fill="#0099b5"/>
+        <circle cx="145" cy="38" r="5" fill="#fff"/>
+        <circle cx="165" cy="38" r="5" fill="#fff"/>
+        <circle cx="135" cy="55" r="5" fill="#fff"/>
+        <circle cx="155" cy="55" r="5" fill="#fff"/>
+        <circle cx="175" cy="55" r="5" fill="#fff"/>
       </svg>
     ),
   },
@@ -68,12 +76,12 @@ export default function LanguageSwitcher() {
   };
 
   return (
-    <nav aria-label="Language switcher" className="flex gap-1">
+    <nav aria-label="Language switcher" className="flex flex-wrap gap-1">
       {languages.map(({ code, label, flag }) => (
         <button
           key={code}
           onClick={() => switchLang(code)}
-          className={`flex items-center gap-1 px-2 py-1 rounded text-xs font-medium transition-colors ${
+          className={`flex items-center gap-1 px-1.5 py-1 sm:px-2 rounded text-xs font-medium transition-colors shrink-0 ${
             (lang || i18n.language) === code
               ? 'bg-indigo-100 text-indigo-700 ring-1 ring-indigo-300'
               : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
