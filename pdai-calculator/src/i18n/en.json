@@ -21,7 +21,7 @@
     "title": "Patient Data",
     "fullName": "Full Name",
     "fullNamePlaceholder": "John Doe",
-    "birthYear": "Year of Birth",
+    "birthYear": "Date of Birth",
     "birthYearPlaceholder": "1985",
     "diagnosis": "Diagnosis",
     "diagnosisPlaceholder": "Pemphigus vulgaris",
@@ -34,9 +34,14 @@
   },
   "visualization": {
     "title": "Affected Areas Visualization",
+    "body": "Body & Skin",
     "head": "Head",
-    "oral": "Oral Cavity",
-    "torso": "Torso"
+    "oral": "Mucous Membranes",
+    "torso": "Trunk",
+    "extraOral": "Extra-oral mucosa:",
+    "normal": "Normal",
+    "affected": "Affected",
+    "pigmentation": "Pigmentation"
   },
   "skin": {
     "title": "Skin",

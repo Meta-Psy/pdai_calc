@@ -107,17 +107,17 @@ table select {
     color: black !important;
   }
 
-  /* Scale to fit 1 page — larger when no recommendations */
+  /* Scale to fit 1 page — visualization now visible */
   #root {
-    transform: scale(0.83);
+    transform: scale(0.68);
     transform-origin: top left;
-    width: 120.5%; /* 100 / 0.83 */
+    width: 147.1%; /* 100 / 0.68 */
   }
 
   /* Slightly smaller when recommendations are present */
   #root:has(.has-recommendations) {
-    transform: scale(0.76);
-    width: 131.6%; /* 100 / 0.76 */
+    transform: scale(0.63);
+    width: 158.7%; /* 100 / 0.63 */
   }
 
   /* Force print colors */
@@ -301,5 +301,30 @@ table select {
   /* col-span fix for results severity box */
   .col-span-2 {
     grid-column: span 1 !important;
+  }
+
+  /* Visualization section — compact for print */
+  .print-viz {
+    padding: 2px 4px !important;
+    margin-bottom: 3px !important;
+    page-break-inside: avoid;
+  }
+
+  .print-viz h2 {
+    font-size: 8pt !important;
+    margin-bottom: 1px !important;
+  }
+
+  .print-viz h3 {
+    font-size: 7pt !important;
+    margin-bottom: 0 !important;
+  }
+
+  .print-viz svg {
+    max-height: 160px !important;
+  }
+
+  .print-viz .text-xs {
+    font-size: 5pt !important;
   }
 }

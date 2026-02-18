@@ -1,11 +1,11 @@
 {
   "meta": {
-    "title": "PDAI Calculator — Pemfigus kasalligi hududi indeksi | Skin Lab Pro",
+    "title": "PDAI Calculator — Po'rsildoq yara kasalligi teri yuzasi shikastlanish indeksi | Skin Lab Pro",
     "description": "Dermatologlar uchun bepul onlayn PDAI kalkulyatori. Pemfigus kasalligining og'irligini Pemphigus Disease Area Index bo'yicha baholang."
   },
   "header": {
     "title": "PDAI Calculator",
-    "subtitle": "Pemfigus kasalligi hududi indeksi kalkulyatori",
+    "subtitle": "Po'rsildoq yara kasalligi teri yuzasi shikastlanish indeksi kalkulyatori",
     "by": "by itsmegauka"
   },
   "actions": {
@@ -24,7 +24,7 @@
     "birthYear": "Tug'ilgan yili",
     "birthYearPlaceholder": "1985",
     "diagnosis": "Tashxis",
-    "diagnosisPlaceholder": "Vulgar pemfigus",
+    "diagnosisPlaceholder": "Vulgar po'rsildoq",
     "immunofluorescence": "To'g'ridan-to'g'ri immunofluoressensiya",
     "selectPlaceholder": "Tanlang...",
     "ifNone": "0 - Yo'q",
@@ -33,10 +33,15 @@
     "ifStrong": "+++ Kuchli"
   },
   "visualization": {
-    "title": "Zararlangan hududlar vizualizatsiyasi",
+    "title": "Shikastlangan teri sohalari vizualizatsiyasi",
+    "body": "Tana va teri",
     "head": "Bosh",
-    "oral": "Og'iz bo'shlig'i",
-    "torso": "Tana"
+    "oral": "Shilliq qavatlar",
+    "torso": "Tana",
+    "extraOral": "Og'izdan tashqari shilliq qavatlar:",
+    "normal": "Norma",
+    "affected": "Shikastlangan",
+    "pigmentation": "Pigmentatsiya"
   },
   "skin": {
     "title": "Teri",
@@ -46,7 +51,7 @@
     "scale2": "2 — 2-3 o'choq, kamida 2 ta o'choq diametri 2 sm dan katta, 6 sm dan oshmaydigan",
     "scale3": "3 — 3 dan ortiq o'choq, diametri 6 sm dan oshmaydigan",
     "scale5": "5 — 3 dan ortiq o'choq, va/yoki kamida 1 o'choq 6 sm dan katta",
-    "scale10": "10 — 3 dan ortiq o'choq, va/yoki kamida 1 o'choq diametri 16 sm dan katta yoki butun hudud",
+    "scale10": "10 — 3 dan ortiq o'choq, va/yoki kamida 1 o'choq diametri 16 sm dan katta yoki butun yuzasi",
     "lesionTitle": "O'choqlar soni ≤3 bo'lsa:",
     "lesionDesc": "O'choqlar soni ≤3 ta bo'lganda, 1 element diametri ≥2 sm, lekin ≥6 sm element yo'q:",
     "lesion1": "1 element = 1 ball",
@@ -112,7 +117,7 @@
     "floorOfMouth": "Og'iz bo'shlig'i tubi",
     "lips": "Lab shilliq qavati",
     "pharynx": "Halqumning orqa devori",
-    "anogenital": "Anogenital hudud"
+    "anogenital": "Anogenital yuzasi"
   },
   "results": {
     "title": "PDAI yakuniy ballari",
