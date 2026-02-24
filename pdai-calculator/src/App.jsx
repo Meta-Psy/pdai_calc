@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import SEOHead from './components/SEOHead';
 import LanguageSwitcher from './components/LanguageSwitcher';
 import PatientForm from './components/PatientForm';
+import TreatmentGuide from './components/TreatmentGuide';
 import BodyVisualization from './components/BodyVisualization';
 import SkinTable from './components/SkinTable';
 import ScalpTable from './components/ScalpTable';
@@ -136,6 +137,7 @@ export default function App() {
 
           <main>
             <PatientForm patientData={calc.patientData} updatePatient={calc.updatePatient} />
+            <TreatmentGuide totals={calc.totals} />
             <BodyVisualization skinAreas={calc.skinAreas} scalp={calc.scalp} mucosa={calc.mucosa} />
             <SkinTable skinAreas={calc.skinAreas} totals={calc.totals} updateSkin={calc.updateSkin} />
             <ScalpTable scalp={calc.scalp} totals={calc.totals} updateScalp={calc.updateScalp} />

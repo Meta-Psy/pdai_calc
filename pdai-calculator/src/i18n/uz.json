@@ -156,5 +156,44 @@
   "printHeader": "PDAI Calculator | Sana:",
   "guide": {
     "toggle": "Baholash shkalasi"
+  },
+  "treatmentGuide": {
+    "title": "Bemorlarni boshqarish bo'yicha tavsiyalar",
+    "tab": {
+      "mild": "Yengil (<15)",
+      "moderate": "O'rtacha (15–45)",
+      "severe": "Og'ir (>45)",
+      "general": "Umumiy"
+    },
+    "sections": {
+      "treatment": "Davolash",
+      "management": "Boshqarish",
+      "nutrition": "Ovqatlanish"
+    },
+    "mild": {
+      "treatment": "1. Tizimli terapiya: Prednizolon 0,5–1 mg/kg/kun dozani asta-sekin kamaytirish bilan.\n2. Steroid tejovchi terapiya: Azatioprin 1–3 mg/kg/kun yoki Mikofenolat mofetil 2–3 g/kun.\n3. Mahalliy terapiya: Topikal kortikosteroidlar (klobetazol 0,05%) eroziya va pufaklarga; antiseptik eritmalar (xlorgeksidin 0,05%) eroziyalarni ishlov berish uchun.",
+      "management": "• Dermatolog ambulatoriya nazorati har 2–4 haftada.\n• Klinik qon tahlili va biokimyoviy tekshiruvlar har 2–4 haftada.\n• Desmogleinga qarshi antitanalar titrini monitoring qilish (har 3 oyda).\n• Har bir tashrifda PDAI baholash.",
+      "nutrition": "• Shilliq qavat shikastlanganda yumshoq dieta (maydalangan taom, achchiq, nordon, issiq taomlardan saqlanish).\n• Tkaninalarni tiklash uchun yetarli oqsil iste'moli (1,2–1,5 g/kg/kun).\n• GKS fonida osteoporoz profilaktikasi uchun kaltsiy (1000–1200 mg/kun) va D vitamini (800–1000 XB/kun)."
+    },
+    "moderate": {
+      "treatment": "1. Tizimli terapiya: Prednizolon 1–1,5 mg/kg/kun.\n2. Immunosupressiya: Azatioprin 2–3 mg/kg/kun yoki Mikofenolat mofetil 2–3 g/kun; yetarli javob bo'lmaganda — Rituksimabni ko'rib chiqish.\n3. Mahalliy terapiya: Yuqori faollikdagi topikal kortikosteroidlar; eroziyalarni antiseptik ishlov berish; og'iz bo'shlig'i shikastlanganda — deksametazon chayish eritmasi.",
+      "management": "• Tez rivojlanayotganda gospitalizatsiyani ko'rib chiqish.\n• Dermatolog ko'rigi har 1–2 haftada.\n• Klinik va biokimyoviy qon tahlillarini har hafta monitoring qilish.\n• Desmogleinga qarshi antitanalar titrini monitoring qilish (har 1–3 oyda).\n• Har bir tashrifda PDAI baholash, shikastlanishlarni suratga olish.",
+      "nutrition": "• Yuqori oqsilli dieta (1,5–2 g/kg/kun oqsil).\n• Shilliq qavat kuchli shikastlanganda suyuq yoki yarim suyuq ovqat.\n• Kaltsiy va D vitaminini ko'paytirilgan dozalarda.\n• Glikemiya nazorati (yuqori dozali GKS fonida tez hazm bo'ladigan uglevodlarni cheklash)."
+    },
+    "severe": {
+      "treatment": "1. Tizimli terapiya: Metilprednizolon puls-terapiyasi (500–1000 mg/kun v/v 3 kun) keyin Prednizolon 1,5–2 mg/kg/kun.\n2. Biologik terapiya: Rituksimab (1000 mg v/v, 2 hafta oraliq bilan 2 infuziya) — birinchi qator terapiya sifatida ko'rib chiqish.\n3. Immunosupressiya: Tsiklofosfamid yoki Azatioprin + Mikofenolat mofetil.\n4. VVIG: Immunoglobulin v/v 2 g/kg har bir tsiklda refrakter kechishda.\n5. Mahalliy terapiya: Maxsus bog'lamlar; antiseptik ishlov berish; og'riq qoldirish.",
+      "management": "• Majburiy gospitalizatsiya.\n• Multidistsiplinar yondashuv (dermatolog, terapevt, nutritsiolog, ko'z shikastlanganda — oftalmolog).\n• Kundalik monitoring: suv-elektrolit balansi, glikemiya, qon bosimi, harorat.\n• Qon tahlillari haftada 2–3 marta.\n• Infektsiyalar profilaktikasi (eroziyalardan ekim, zarur bo'lganda — antibiotikoterapiya).\n• Tromboembolik asoratlar profilaktikasi.",
+      "nutrition": "• Yuqori kaloriyali yuqori oqsilli dieta (2–2,5 g/kg/kun oqsil).\n• Og'iz orqali ovqatlanish mumkin bo'lmaganda — nazogastral zond yoki parenteral ovqatlanish.\n• Kuchaytirilgan nutritiv qo'llab-quvvatlash: B guruhi vitaminlari, rux, C vitamini.\n• Qat'iy glikemiya nazorati.\n• Yetarli gidratatsiya (suv balansini monitoring qilish)."
+    },
+    "general": {
+      "title": "Umumiy tavsiyalar",
+      "content": "• Teri shikastlanishidan saqlaning (Nikolskiy belgisi fenomeni).\n• Tabiiy matolardan tikilgan yumshoq, erkin kiyim kiying.\n• UB nurlanishdan saqlaning (SPF 50+ quyoshdan himoya kremlari).\n• Og'iz bo'shlig'i gigienasi: yumshoq tish cho'tkasi, abraziv bo'lmagan tish pastasi.\n• Uzoq muddatli GKS terapiyasi fonida osteoporoz profilaktikasi.\n• Vaksinatsiya: pnevmokokk, gripp (immunosupressiyadan oldin yoki remissiya davrida).\n• Bemorga psixologik yordam.\n• Bemorni o'qitish: qo'zg'alishlarni aniqlash, teriga parvarish qoidalari.\n• Shikastlanishlarni muntazam suratga olish va dinamikani kuzatish."
+    },
+    "notes": {
+      "title": "Eslatmalar — Elementlarni hisoblash qoidasi",
+      "rule1": "1 element = 1 ball",
+      "rule2": "2 element = 1.3 ball",
+      "rule3": "3 element = 1.6 ball"
+    }
   }
 }
