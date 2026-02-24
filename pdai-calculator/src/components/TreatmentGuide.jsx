@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getSeverityLevel } from '../utils/calculator';
 
@@ -47,11 +47,9 @@ export default function TreatmentGuide({ totals }) {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const severity = getSeverityLevel(totals.overallSeverity);
-  const [activeTab, setActiveTab] = useState(severity);
-
-  useEffect(() => {
-    setActiveTab(getSeverityLevel(totals.overallSeverity));
-  }, [totals.overallSeverity]);
+  const [tabState, setTabState] = useState({ tab: severity, forSeverity: severity });
+  const activeTab = tabState.forSeverity === severity ? tabState.tab : severity;
+  const setActiveTab = (tab) => setTabState({ tab, forSeverity: severity });
 
   return (
     <section className="bg-white rounded-xl shadow-lg mb-6 no-print" aria-labelledby="treatment-guide-title">
