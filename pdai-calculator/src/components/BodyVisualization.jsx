@@ -23,7 +23,7 @@ export default function BodyVisualization({ skinAreas, scalp, mucosa }) {
   return (
     <section className="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-6 print-viz" aria-labelledby="viz-title">
       <h2 id="viz-title" className="text-lg md:text-2xl font-bold text-gray-800 mb-3 text-center">{t('visualization.title')}</h2>
-      <div className="grid grid-cols-3 gap-2 md:gap-4 items-stretch">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 md:gap-4 items-stretch">
 
         {/* 1. HEAD + extra-oral mucosa */}
         <div className="flex flex-col">

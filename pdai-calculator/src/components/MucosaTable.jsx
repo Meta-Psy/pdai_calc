@@ -9,7 +9,7 @@ export default function MucosaTable({ mucosa, totals, updateMucosa }) {
   const [activeRow, setActiveRow] = useState(null);
 
   return (
-    <section className="bg-white rounded-xl shadow-lg p-6 mb-6" aria-labelledby="mucosa-title">
+    <section className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-6" aria-labelledby="mucosa-title">
       <h2 id="mucosa-title" className="text-2xl font-bold mb-4">{t('mucosa.title')}</h2>
       <button
         onClick={() => setShowGuide(!showGuide)}
@@ -32,7 +32,28 @@ export default function MucosaTable({ mucosa, totals, updateMucosa }) {
           <p className="text-gray-700">{t('mucosa.noteText')}</p>
         </div>
       )}
-      <div className="overflow-x-auto">
+
+      {/* Mobile: card layout */}
+      <div className="sm:hidden space-y-2 no-print">
+        {MUCOSA_KEYS.map(k => (
+          <div key={k} className={`border rounded-lg p-3 ${mucosa[k] > 0 ? 'border-indigo-300 bg-indigo-50/30' : 'border-gray-200'}`}>
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-medium text-sm text-gray-800 flex items-center gap-1.5 shrink-0">
+                {mucosa[k] > 0 && <span className="inline-block w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" />}
+                {t(`mucosa.${k}`)}
+              </span>
+              <ScoreButtons scores={SCORES} value={mucosa[k]} onChange={v => updateMucosa(k, v)} />
+            </div>
+          </div>
+        ))}
+        <div className="bg-indigo-100 rounded-lg p-3 font-bold text-sm flex justify-between">
+          <span>{t('mucosa.totalMucosa')}</span>
+          <span>{totals.mucosaTotal}</span>
+        </div>
+      </div>
+
+      {/* Desktop: table layout */}
+      <div className="hidden sm:block overflow-x-auto">
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="bg-indigo-50">

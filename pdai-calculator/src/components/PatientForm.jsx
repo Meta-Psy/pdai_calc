@@ -4,7 +4,7 @@ export default function PatientForm({ patientData, updatePatient }) {
   const { t } = useTranslation();
 
   return (
-    <section className="bg-white rounded-xl shadow-lg p-6 mb-6" aria-labelledby="patient-title">
+    <section className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-6" aria-labelledby="patient-title">
       <h2 id="patient-title" className="text-2xl font-bold mb-4">{t('patient.title')}</h2>
       <div className="grid md:grid-cols-2 gap-4">
         <div>

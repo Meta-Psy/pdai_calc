@@ -11,7 +11,7 @@ export default function SkinTable({ skinAreas, totals, updateSkin }) {
   const hasValue = (k) => skinAreas[k].erosions > 0 || skinAreas[k].lesionCount > 0 || skinAreas[k].pigmentation > 0;
 
   return (
-    <section className="bg-white rounded-xl shadow-lg p-6 mb-6" aria-labelledby="skin-title">
+    <section className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-6" aria-labelledby="skin-title">
       <h2 id="skin-title" className="text-2xl font-bold mb-4">{t('skin.title')}</h2>
       <button
         onClick={() => setShowGuide(!showGuide)}
@@ -45,7 +45,43 @@ export default function SkinTable({ skinAreas, totals, updateSkin }) {
           </ul>
         </div>
       )}
-      <div className="overflow-x-auto">
+
+      {/* Mobile: card layout */}
+      <div className="sm:hidden space-y-3 no-print">
+        {SKIN_KEYS.map(k => (
+          <div key={k} className={`border rounded-lg p-3 ${hasValue(k) ? 'border-indigo-300 bg-indigo-50/30' : 'border-gray-200'}`}>
+            <div className="font-medium text-sm text-gray-800 mb-2 flex items-center gap-1.5">
+              {hasValue(k) && <span className="inline-block w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" />}
+              {t(`skin.${k}`)}
+            </div>
+            <div className="space-y-2">
+              <div>
+                <span className="text-xs text-gray-500 block mb-1">{t('skin.colErosions')}</span>
+                <ScoreButtons scores={SCORES} value={skinAreas[k].erosions} onChange={v => updateSkin(k, 'erosions', v)} />
+              </div>
+              <div>
+                <span className="text-xs text-gray-500 block mb-1">{t('skin.colLesionCount')}</span>
+                <ScoreButtons scores={LESION_COUNTS} value={skinAreas[k].lesionCount} onChange={v => updateSkin(k, 'lesionCount', v)} />
+              </div>
+              <div>
+                <span className="text-xs text-gray-500 block mb-1">{t('skin.colPigmentation')}</span>
+                <ScoreButtons scores={PIGMENTATION_SCORES} value={skinAreas[k].pigmentation} onChange={v => updateSkin(k, 'pigmentation', v)} />
+              </div>
+            </div>
+          </div>
+        ))}
+        <div className="bg-indigo-100 rounded-lg p-3 font-bold text-sm">
+          <div>{t('skin.totalSkin')}</div>
+          <div className="flex gap-4 mt-1 text-xs">
+            <span>{t('skin.colErosions')}: {totals.skinErosions}</span>
+            <span>{t('skin.colLesionCount')}: {totals.skinLesionCount.toFixed(1)}</span>
+            <span>{t('skin.colPigmentation')}: {totals.skinPigmentation}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop: table layout */}
+      <div className="hidden sm:block overflow-x-auto">
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="bg-indigo-50">

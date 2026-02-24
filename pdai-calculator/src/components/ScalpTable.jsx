@@ -11,7 +11,7 @@ export default function ScalpTable({ scalp, totals, updateScalp }) {
   const hasValue = scalp.erosions > 0 || scalp.lesionCount > 0 || scalp.pigmentation > 0;
 
   return (
-    <section className="bg-white rounded-xl shadow-lg p-6 mb-6" aria-labelledby="scalp-title">
+    <section className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-6" aria-labelledby="scalp-title">
       <h2 id="scalp-title" className="text-2xl font-bold mb-4">{t('scalp.title')}</h2>
       <button
         onClick={() => setShowGuide(!showGuide)}
@@ -33,7 +33,41 @@ export default function ScalpTable({ scalp, totals, updateScalp }) {
           </ul>
         </div>
       )}
-      <div className="overflow-x-auto">
+
+      {/* Mobile: card layout */}
+      <div className="sm:hidden no-print">
+        <div className={`border rounded-lg p-3 ${hasValue ? 'border-indigo-300 bg-indigo-50/30' : 'border-gray-200'}`}>
+          <div className="font-medium text-sm text-gray-800 mb-2 flex items-center gap-1.5">
+            {hasValue && <span className="inline-block w-1.5 h-1.5 rounded-full bg-indigo-500 shrink-0" />}
+            {t('scalp.colScalp')}
+          </div>
+          <div className="space-y-2">
+            <div>
+              <span className="text-xs text-gray-500 block mb-1">{t('scalp.colErosions')}</span>
+              <ScoreButtons scores={SCALP_SCORES} value={scalp.erosions} onChange={v => updateScalp('erosions', v)} />
+            </div>
+            <div>
+              <span className="text-xs text-gray-500 block mb-1">{t('scalp.colLesionCount')}</span>
+              <ScoreButtons scores={LESION_COUNTS} value={scalp.lesionCount} onChange={v => updateScalp('lesionCount', v)} />
+            </div>
+            <div>
+              <span className="text-xs text-gray-500 block mb-1">{t('scalp.colPigmentation')}</span>
+              <ScoreButtons scores={PIGMENTATION_SCORES} value={scalp.pigmentation} onChange={v => updateScalp('pigmentation', v)} />
+            </div>
+          </div>
+        </div>
+        <div className="bg-indigo-100 rounded-lg p-3 font-bold text-sm mt-3">
+          <div>{t('scalp.totalScalp')}</div>
+          <div className="flex gap-4 mt-1 text-xs">
+            <span>{t('scalp.colErosions')}: {totals.scalpErosions}</span>
+            <span>{t('scalp.colLesionCount')}: {totals.scalpLesionCount.toFixed(1)}</span>
+            <span>{t('scalp.colPigmentation')}: {totals.scalpPigmentation}</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Desktop: table layout */}
+      <div className="hidden sm:block overflow-x-auto">
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="bg-indigo-50">
