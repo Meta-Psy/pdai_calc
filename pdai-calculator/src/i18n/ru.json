@@ -138,7 +138,11 @@
   },
   "info": {
     "title": "Информация о PDAI",
-    "description": "PDAI (Pemphigus Disease Area Index) — стандартизированная шкала для оценки тяжести пузырчатки.",
+    "description": "PDAI (Pemphigus Disease Area Index) — стандартизированная шкала для оценки тяжести пузырчатки, разработанная международным экспертным комитетом.",
+    "attribution": "Шкала PDAI разработана International Pemphigus Definitions Committee под руководством Dedee F. Murrell и Victoria P. Werth.",
+    "citation": "Murrell DF, Dick S, Ahmed AR, et al. Consensus statement on definitions of disease, end points, and therapeutic response for pemphigus. J Am Acad Dermatol. 2008;58(6):1043-1046.",
+    "digitalTool": "Данное веб-приложение является цифровой реализацией опубликованной шкалы и не связано с авторами оригинальной методологии.",
+    "disclaimer": "Калькулятор предназначен для использования медицинскими специалистами и не заменяет клиническое суждение врача.",
     "interpretation": "Интерпретация результатов:",
     "mild": "Лёгкая степень: меньше 15 баллов",
     "moderate": "Средняя степень: 15-45 баллов",
@@ -146,7 +150,8 @@
   },
   "footer": {
     "copyright": "© 2024-2026 Skin Lab Pro by itsmegauka",
-    "medical": "Для медицинского использования"
+    "medical": "Для медицинского использования",
+    "disclaimer": "Цифровая реализация шкалы PDAI (Murrell et al., 2008)"
   },
   "printHeader": "PDAI Calculator | Дата:",
   "guide": {

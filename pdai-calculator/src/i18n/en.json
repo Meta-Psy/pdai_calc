@@ -138,7 +138,11 @@
   },
   "info": {
     "title": "About PDAI",
-    "description": "PDAI (Pemphigus Disease Area Index) is a standardized scale for assessing pemphigus severity.",
+    "description": "PDAI (Pemphigus Disease Area Index) is a standardized scale for assessing pemphigus severity, developed by an international expert committee.",
+    "attribution": "The PDAI scoring system was developed by the International Pemphigus Definitions Committee, led by Dedee F. Murrell and Victoria P. Werth.",
+    "citation": "Murrell DF, Dick S, Ahmed AR, et al. Consensus statement on definitions of disease, end points, and therapeutic response for pemphigus. J Am Acad Dermatol. 2008;58(6):1043-1046.",
+    "digitalTool": "This web application is a digital implementation of the published scoring system and is not affiliated with the original methodology authors.",
+    "disclaimer": "This calculator is intended for use by medical professionals and does not replace clinical judgment.",
     "interpretation": "Interpretation of results:",
     "mild": "Mild: less than 15 points",
     "moderate": "Moderate: 15-45 points",
@@ -146,7 +150,8 @@
   },
   "footer": {
     "copyright": "© 2024-2026 Skin Lab Pro by itsmegauka",
-    "medical": "For medical use"
+    "medical": "For medical use",
+    "disclaimer": "Digital implementation of the PDAI scale (Murrell et al., 2008)"
   },
   "printHeader": "PDAI Calculator | Date:",
   "guide": {

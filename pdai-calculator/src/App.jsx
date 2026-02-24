@@ -148,6 +148,7 @@ export default function App() {
           <footer className="text-center text-gray-600 text-sm py-4 no-print">
             <p>{t('footer.copyright')}</p>
             <p className="mt-1 text-xs">{t('footer.medical')}</p>
+            <p className="mt-1 text-xs text-gray-400">{t('footer.disclaimer')}</p>
           </footer>
         </div>
       </div>

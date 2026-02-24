@@ -138,7 +138,11 @@
   },
   "info": {
     "title": "PDAI haqida",
-    "description": "PDAI (Pemphigus Disease Area Index) — pemfigus og'irligini baholash uchun standartlashtirilgan shkala.",
+    "description": "PDAI (Pemphigus Disease Area Index) — pemfigus og'irligini baholash uchun xalqaro ekspert qo'mitasi tomonidan ishlab chiqilgan standartlashtirilgan shkala.",
+    "attribution": "PDAI shkalasi International Pemphigus Definitions Committee tomonidan Dedee F. Murrell va Victoria P. Werth rahbarligida ishlab chiqilgan.",
+    "citation": "Murrell DF, Dick S, Ahmed AR, et al. Consensus statement on definitions of disease, end points, and therapeutic response for pemphigus. J Am Acad Dermatol. 2008;58(6):1043-1046.",
+    "digitalTool": "Ushbu veb-ilova nashr etilgan shkalaning raqamli versiyasi bo'lib, asl metodologiya mualliflari bilan bog'liq emas.",
+    "disclaimer": "Kalkulyator tibbiyot mutaxassislari uchun mo'ljallangan va shifokor xulosasini almashtirolmaydi.",
     "interpretation": "Natijalar talqini:",
     "mild": "Yengil daraja: 15 balldan kam",
     "moderate": "O'rtacha daraja: 15-45 ball",
@@ -146,7 +150,8 @@
   },
   "footer": {
     "copyright": "© 2024-2026 Skin Lab Pro by itsmegauka",
-    "medical": "Tibbiy foydalanish uchun"
+    "medical": "Tibbiy foydalanish uchun",
+    "disclaimer": "PDAI shkalasining raqamli versiyasi (Murrell et al., 2008)"
   },
   "printHeader": "PDAI Calculator | Sana:",
   "guide": {

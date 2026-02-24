@@ -138,7 +138,11 @@
   },
   "info": {
     "title": "PDAI ҳаққында",
-    "description": "PDAI (Pemphigus Disease Area Index) — пемфигус аўырлығын баҳалаў ушын стандартластырылған шкала.",
+    "description": "PDAI (Pemphigus Disease Area Index) — пемфигус аўырлығын баҳалаў ушын халықаралық эксперт комитети тәрепинен ислеп шығылған стандартластырылған шкала.",
+    "attribution": "PDAI шкаласы International Pemphigus Definitions Committee тәрепинен Dedee F. Murrell ҳәм Victoria P. Werth басшылығында ислеп шығылған.",
+    "citation": "Murrell DF, Dick S, Ahmed AR, et al. Consensus statement on definitions of disease, end points, and therapeutic response for pemphigus. J Am Acad Dermatol. 2008;58(6):1043-1046.",
+    "digitalTool": "Бул веб-қосымша жәрияланған шкаланың санлы версиясы болып, түпнусқа методология авторлары менен байланыслы емес.",
+    "disclaimer": "Калькулятор медицина қәнигелери ушын мөлшерленген ҳәм шыпакердиң клиникалық пикирин алмастырмайды.",
     "interpretation": "Нәтийжелер талқыны:",
     "mild": "Жеңил дәреже: 15 баллдан кем",
     "moderate": "Орташа дәреже: 15-45 балл",
@@ -146,7 +150,8 @@
   },
   "footer": {
     "copyright": "© 2024-2026 Skin Lab Pro by itsmegauka",
-    "medical": "Медициналық пайдаланыў ушын"
+    "medical": "Медициналық пайдаланыў ушын",
+    "disclaimer": "PDAI шкаласының санлы версиясы (Murrell et al., 2008)"
   },
   "printHeader": "PDAI Calculator | Сәне:",
   "guide": {
