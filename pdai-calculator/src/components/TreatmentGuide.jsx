@@ -56,7 +56,7 @@ export default function TreatmentGuide({ totals }) {
       {/* Collapsible header */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between p-4 md:p-5 text-left hover:bg-gray-50 rounded-xl transition-colors"
+        className="w-full flex items-center justify-between p-4 md:p-5 text-left bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors group"
         aria-expanded={isOpen}
       >
         <div className="flex items-center gap-2.5">
@@ -65,12 +65,14 @@ export default function TreatmentGuide({ totals }) {
             {t('treatmentGuide.title')}
           </h2>
         </div>
-        <svg
-          className={`w-5 h-5 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-          fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-        </svg>
+        <span className="flex items-center justify-center w-7 h-7 rounded-full bg-gray-200/60 group-hover:bg-gray-300/60 transition-colors">
+          <svg
+            className={`w-4 h-4 text-gray-600 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+            fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </span>
       </button>
 
       {isOpen && (

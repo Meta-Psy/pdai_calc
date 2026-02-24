@@ -13,9 +13,10 @@ export default function MucosaTable({ mucosa, totals, updateMucosa }) {
       <h2 id="mucosa-title" className="text-2xl font-bold mb-4">{t('mucosa.title')}</h2>
       <button
         onClick={() => setShowGuide(!showGuide)}
-        className="mb-4 flex items-center gap-2 text-sm font-medium text-indigo-700 hover:text-indigo-900 no-print"
+        className="mb-4 inline-flex items-center gap-2 text-sm font-medium text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200/60 rounded-lg px-3 py-1.5 transition-colors no-print"
+        aria-expanded={showGuide}
       >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={`transition-transform ${showGuide ? 'rotate-90' : ''}`}><path d="m9 18 6-6-6-6"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className={`transition-transform duration-200 ${showGuide ? 'rotate-180' : ''}`}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7"/></svg>
         {t('guide.toggle')}
       </button>
       {showGuide && (
